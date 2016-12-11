@@ -8,4 +8,10 @@
         android:layout_height="wrap_content"
         android:text="Second Activity"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="go back to MainActivity"
+        android:onClick="btnGoBackToMainActivity"/>
+
 </LinearLayout>
