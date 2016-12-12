@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         broadcastReceiver = new MyBroadcastReceiver();
+        intentFilter.setPriority(10);
         intentFilter = new IntentFilter(MY_SPECIFIC_ACTION);
 
     }
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MY_SPECIFIC_ACTION);
         intent.putExtra("lat", 34.5);
         intent.putExtra("lng", -15.5);
-        sendBroadcast(intent);
-
+        //sendBroadcast(intent);
+        sendOrderedBroadcast(intent, null);
     }
 }

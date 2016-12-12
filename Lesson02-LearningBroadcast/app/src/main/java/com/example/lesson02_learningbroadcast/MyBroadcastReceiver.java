@@ -17,5 +17,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         Toast.makeText(context, "received broadcast lat="+latitude
                 +",lng="+longitude, Toast.LENGTH_SHORT).show();
 
+        abortBroadcast();
+
     }
 }
