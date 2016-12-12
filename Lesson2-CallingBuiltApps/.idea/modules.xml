@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Lesson2-AutoLaunchingatBoot.iml" filepath="$PROJECT_DIR$/Lesson2-AutoLaunchingatBoot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Lesson2-CallingBuiltApps.iml" filepath="$PROJECT_DIR$/Lesson2-CallingBuiltApps.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
