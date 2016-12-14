@@ -3,11 +3,12 @@ package com.example.lesson4_httpclient;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,25 +19,35 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity implements CheckMessageThread.GotNewMessageListener {
 
-    TextView lblMessage;
+    //TextView lblMessage;
     EditText txtMessage;
     Handler handler = new Handler();
     Button btnSend;
     CheckMessageThread checkMessageThread;
+    ListView listViewMessages;
+    List<String> messages;
+    ArrayAdapter<String> adapter;
 
     public static final String BASE_URL = "http://146.148.28.47/SimpleChat/MainServlet";
+    //public static final String BASE_URL = "http://10.0.2.2:8080/MainServlet";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lblMessage = (TextView)findViewById(R.id.lblMessage);
+        //lblMessage = (TextView)findViewById(R.id.lblMessage);
         txtMessage = (EditText)findViewById(R.id.txtMessage);
         btnSend = (Button)findViewById(R.id.btnSend);
+        messages = new ArrayList<>();
+        listViewMessages = (ListView)findViewById(R.id.listViewMessages);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, messages);
+        listViewMessages.setAdapter(adapter);
     }
 
 
@@ -44,7 +55,7 @@ public class MainActivity extends Activity implements CheckMessageThread.GotNewM
     protected void onResume() {
         super.onResume();
         if(checkMessageThread == null) {
-            checkMessageThread = new CheckMessageThread(this);
+            checkMessageThread = new CheckMessageThread(this, messages);
             checkMessageThread.start();
         }
     }
@@ -148,15 +159,17 @@ public class MainActivity extends Activity implements CheckMessageThread.GotNewM
     }
 
     @Override
-    public void onNewMessage(String message) {
-        handler.post(new MessageRunnable(message) {
+    public void onNewMessage() {
+        handler.post(new Runnable() {
             @Override
             public void run() {
-                lblMessage.setText(this.message);
+                adapter.notifyDataSetChanged();
+                listViewMessages.smoothScrollToPosition(messages.size());
             }
         });
     }
 }
+/*
 abstract class MessageRunnable implements Runnable{
 
     String message;
@@ -165,4 +178,4 @@ abstract class MessageRunnable implements Runnable{
         this.message = message;
     }
 
-}
+}*/

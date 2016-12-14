@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.List;
 
 /**
  * Created by eladlavi on 14/12/2016.
@@ -18,9 +19,11 @@ public class CheckMessageThread extends Thread {
     private boolean go = true;
     private String existingMessage;
     private GotNewMessageListener listener;
+    private List<String> messages;
 
-    public CheckMessageThread(GotNewMessageListener listener) {
+    public CheckMessageThread(GotNewMessageListener listener, List<String> messages) {
         this.listener = listener;
+        this.messages = messages;
     }
 
     @Override
@@ -29,7 +32,7 @@ public class CheckMessageThread extends Thread {
             HttpURLConnection urlConnection = null;
             InputStream inputStream = null;
             try{
-                URL url = new URL(MainActivity.BASE_URL + "?action=check");
+                URL url = new URL(MainActivity.BASE_URL + "?action=check&from="+messages.size());
                 urlConnection = (HttpURLConnection)url.openConnection();
                 urlConnection.setUseCaches(false);
                 urlConnection.setRequestMethod("GET");
@@ -44,11 +47,16 @@ public class CheckMessageThread extends Thread {
                 inputStream.close();
                 inputStream = null;
                 String result = stringBuilder.toString();
-                result = URLDecoder.decode(result, "utf-8");
-                if(!result.equals(existingMessage)){
-                    this.existingMessage = result;
-                    if(listener != null)
-                        listener.onNewMessage(result);
+                if(result.length() > 0) {
+                    String newMessages[] = result.split("&");
+                    if (newMessages.length > 0) {
+                        for (String newMessage : newMessages) {
+                            newMessage = URLDecoder.decode(newMessage, "utf-8");
+                            messages.add(newMessage);
+                        }
+                        if (listener != null)
+                            listener.onNewMessage();
+                    }
                 }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -75,7 +83,7 @@ public class CheckMessageThread extends Thread {
     }
 
     public interface GotNewMessageListener{
-        void onNewMessage(String message);
+        void onNewMessage();
     }
 
     public void stopChecking(){
