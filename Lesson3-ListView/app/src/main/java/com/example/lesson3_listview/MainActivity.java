@@ -10,7 +10,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements CityDialogFragment.CityDialogListener {
 
 
     String[] cityNames = {
@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
     int[] images = {R.drawable.kfar_saba, R.drawable.modieen,
             R.drawable.pic04, R.drawable.ramat_gan,
             R.drawable.rishon};
-
+    CityArrayAdapter adapter;
     ListView listView;
 
     @Override
@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
         //        (this, android.R.layout.simple_list_item_checked,
         //                cities);
 
-        CityArrayAdapter adapter = new CityArrayAdapter(this, cities);
+        adapter = new CityArrayAdapter(this, cities);
 
 
         listView.setAdapter(adapter);
@@ -69,5 +69,22 @@ public class MainActivity extends Activity {
         });
 
 
+    }
+
+    public void btnAddCity(View view) {
+        CityDialogFragment fragment = new CityDialogFragment();
+        fragment.setListener(this);
+        fragment.show(getFragmentManager(), "");
+    }
+
+    @Override
+    public void cityAdded(String cityName) {
+        cities.add(new City(cityName, R.drawable.pic04));
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void cityModified() {
+        adapter.notifyDataSetChanged();
     }
 }
