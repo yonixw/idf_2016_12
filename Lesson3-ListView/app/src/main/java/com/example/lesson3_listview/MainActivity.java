@@ -63,8 +63,12 @@ public class MainActivity extends Activity implements CityDialogFragment.CityDia
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 City city = cities.get(position);
                 //city.setSelected(!city.isSelected());
-                Toast.makeText(MainActivity.this, "you have clicked " +
-                        city.getName(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "you have clicked " +
+                //        city.getName(), Toast.LENGTH_SHORT).show();
+                CityDialogFragment fragment = new CityDialogFragment();
+                fragment.setListener(MainActivity.this);
+                fragment.setCity(city);
+                fragment.show(getFragmentManager(), "");
             }
         });
 
@@ -81,6 +85,7 @@ public class MainActivity extends Activity implements CityDialogFragment.CityDia
     public void cityAdded(String cityName) {
         cities.add(new City(cityName, R.drawable.pic04));
         adapter.notifyDataSetChanged();
+        listView.smoothScrollToPosition(cities.size());
     }
 
     @Override

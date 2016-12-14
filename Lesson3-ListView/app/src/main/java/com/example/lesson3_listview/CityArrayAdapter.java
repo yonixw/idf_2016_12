@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -37,6 +38,7 @@ public class CityArrayAdapter extends ArrayAdapter<City> {
     static class ViewContainer{
         TextView lblCityName;
         ImageView imgCity;
+        Button btnDeleteCity;
     }
 
 
@@ -53,6 +55,16 @@ public class CityArrayAdapter extends ArrayAdapter<City> {
                     (ImageView)rowView.findViewById(R.id.imageCity);
             viewContainer.lblCityName =
                     (TextView)rowView.findViewById(lblCityName);
+            viewContainer.btnDeleteCity = (Button)
+                    rowView.findViewById(R.id.btnDeleteCity);
+            viewContainer.btnDeleteCity.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = (Integer)v.getTag();
+                    cities.remove(position);
+                    notifyDataSetChanged();
+                }
+            });
             rowView.setTag(viewContainer);
             Log.d("Elad", "rowView == null " + position);
         }else{
@@ -62,6 +74,8 @@ public class CityArrayAdapter extends ArrayAdapter<City> {
         City city = cities.get(position);
         viewContainer.imgCity.setImageResource(city.getImage());
         viewContainer.lblCityName.setText(city.getName());
+        viewContainer.btnDeleteCity.setTag(position);
         return rowView;
     }
 }
+

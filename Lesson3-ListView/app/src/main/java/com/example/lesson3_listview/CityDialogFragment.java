@@ -62,7 +62,7 @@ public class CityDialogFragment extends DialogFragment {
                 dismiss();
             }
         });
-        //TODO: pop up keybaord
+        //TODO: pop up keyboard
         return view;
     }
 
